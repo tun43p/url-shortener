@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sqids/sqids-go"
+	"github.com/tun43p/api/common"
 	"gorm.io/gorm"
 )
 
@@ -14,7 +15,7 @@ type URLRequest struct {
 }
 
 type URLResponse struct {
-	Original  string `json:"original"`
+	Original  string `json:"original" gorm:"unique"`
 	Short     string `json:"short"`
 	CreatedAt int64  `json:"created_at"`
 }
@@ -29,6 +30,7 @@ func GetURLs(ctx *gin.Context, db *gorm.DB) {
 		for _, a := range urls {
 			if a.Original == u {
 				ctx.IndentedJSON(http.StatusOK, a)
+
 				return
 			}
 		}
@@ -48,10 +50,12 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 	var urls []URLResponse
 
 	if err := ctx.ShouldBindJSON(&url); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Error binding JSON request body",
-			"error":   err.Error(),
-		})
+		ctx.JSON(http.StatusBadRequest,
+			&common.Error{
+				Status:  http.StatusBadRequest,
+				Message: "Error binding JSON request body",
+				Error:   err.Error(),
+			})
 
 		return
 	}
@@ -60,8 +64,10 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 
 	for _, a := range urls {
 		if a.Original == url.Original {
-			ctx.IndentedJSON(http.StatusConflict, gin.H{
-				"message": "URL already exists",
+			ctx.IndentedJSON(http.StatusConflict, &common.Error{
+				Status:  http.StatusConflict,
+				Message: "URL already exists",
+				Error:   "URL already exists",
 			})
 
 			return
@@ -71,18 +77,20 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 	s, err := sqids.New()
 
 	if err != nil {
-		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{
-			"message": "Error generating short URL",
-			"error":   err.Error(),
+		ctx.IndentedJSON(http.StatusInternalServerError, &common.Error{
+			Status:  http.StatusInternalServerError,
+			Message: "Error generating short URL",
+			Error:   err.Error(),
 		})
 	}
 
 	hash, err := s.Encode([]uint64{uint64(time.Now().Unix())})
 
 	if err != nil {
-		ctx.IndentedJSON(http.StatusInternalServerError, gin.H{
-			"message": "Error generating short URL",
-			"error":   err.Error(),
+		ctx.IndentedJSON(http.StatusInternalServerError, &common.Error{
+			Status:  http.StatusInternalServerError,
+			Message: "Error generating short URL",
+			Error:   err.Error(),
 		})
 	}
 
@@ -106,11 +114,14 @@ func Redirect(ctx *gin.Context, db *gorm.DB) {
 	for _, a := range urls {
 		if a.Short == "http://localhost:8080/s/"+s {
 			ctx.Redirect(http.StatusMovedPermanently, a.Original)
+
 			return
 		}
 	}
 
-	ctx.IndentedJSON(http.StatusNotFound, gin.H{
-		"message": "Short URL not found",
+	ctx.IndentedJSON(http.StatusNotFound, &common.Error{
+		Status:  http.StatusNotFound,
+		Message: "Short URL not found",
+		Error:   "Short URL not found",
 	})
 }
