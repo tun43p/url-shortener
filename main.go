@@ -22,6 +22,8 @@ func main() {
 	}
 
 	e := gin.Default()
+
+	// TODO(alex): Protect the API with a secret key
 	v1 := e.Group("/api/v1")
 
 	v1.GET("/healthcheck", func(ctx *gin.Context) {
