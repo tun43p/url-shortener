@@ -6,6 +6,7 @@
   - [Table of contents](#table-of-contents)
   - [Getting started](#getting-started)
     - [Download](#download)
+    - [Start application](#start-application)
   - [Authors](#authors)
   - [License](#license)
 
@@ -14,6 +15,14 @@
 ### Download
 
 To download this project, please do: `git clone https://github.com/tun43p/api.git`.
+
+### Start application
+
+To start the application, please do:
+
+```bash
+API_HOST="localhost:8080" API_KEY="secret" go run main.go
+```
 
 ## Authors
 

@@ -1,16 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
+	"github.com/tun43p/api/middlewares"
 	"github.com/tun43p/api/routes"
 )
 
 func main() {
+	host := os.Getenv("API_HOST")
+
+	fmt.Println("Starting API server on", host)
+
 	db, err := gorm.Open(sqlite.Open("api.db"), &gorm.Config{})
 
 	if err != nil {
@@ -23,11 +30,10 @@ func main() {
 
 	e := gin.Default()
 
-	// TODO(alex): Protect the API with a secret key
-	v1 := e.Group("/api/v1")
+	v1 := e.Group("/api/v1").Use(middlewares.AuthMiddleware)
 
 	v1.GET("/healthcheck", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, "OK")
+		ctx.IndentedJSON(http.StatusOK, "OK")
 	})
 
 	v1.GET("/urls", func(ctx *gin.Context) {
@@ -42,5 +48,5 @@ func main() {
 		routes.Redirect(ctx, db)
 	})
 
-	e.Run("localhost:8080")
+	e.Run(host)
 }

@@ -50,7 +50,7 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 	var urls []URLResponse
 
 	if err := ctx.ShouldBindJSON(&url); err != nil {
-		ctx.JSON(http.StatusBadRequest,
+		ctx.IndentedJSON(http.StatusBadRequest,
 			&common.Error{
 				Status:  http.StatusBadRequest,
 				Message: "Error binding JSON request body",
