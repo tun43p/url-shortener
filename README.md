@@ -21,7 +21,7 @@ To download this project, please do: `git clone https://github.com/tun43p/api.gi
 To start the application, please do:
 
 ```bash
-API_HOST="localhost:8080" API_KEY="secret" go run main.go
+API_HOST="localhost:8080" API_KEY="secret" API_DATABASE="urls.db" go run main.go
 ```
 
 ## Authors
