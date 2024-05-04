@@ -15,10 +15,11 @@ import (
 
 func main() {
 	host := os.Getenv("API_HOST")
+	database := os.Getenv("API_DATABASE")
 
 	fmt.Println("Starting API server on", host)
 
-	db, err := gorm.Open(sqlite.Open("api.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(database), &gorm.Config{})
 
 	if err != nil {
 		panic("Failed to connect to database")
