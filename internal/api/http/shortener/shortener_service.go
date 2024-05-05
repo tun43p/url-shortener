@@ -1,19 +1,21 @@
-package urls
+package shortener
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sqids/sqids-go"
-	"github.com/tun43p/tun43p.com/internal/api/failure"
 	"gorm.io/gorm"
+
+	"github.com/tun43p/tun43p.com/internal/api/failure"
 )
 
-func GetURLs(ctx *gin.Context, db *gorm.DB) {
+func GetSingleOrAllShortenedUrls(ctx *gin.Context, db *gorm.DB) {
 	u := ctx.Query("u")
 
-	var urls []URLResponse
+	var urls []ShortenerResponse
 	db.Find(&urls)
 
 	if u != "" {
@@ -35,9 +37,9 @@ func GetURLs(ctx *gin.Context, db *gorm.DB) {
 	ctx.IndentedJSON(http.StatusOK, urls)
 }
 
-func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
-	var url URLRequest
-	var urls []URLResponse
+func ShortenUrl(ctx *gin.Context, db *gorm.DB) {
+	var url ShortenerResponse
+	var urls []ShortenerResponse
 
 	if err := ctx.ShouldBindJSON(&url); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest,
@@ -84,7 +86,7 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 		})
 	}
 
-	db.Create(&URLResponse{
+	db.Create(&ShortenerResponse{
 		Original:  url.Original,
 		Short:     "http://localhost:8080/s/" + hash,
 		CreatedAt: time.Now().Unix(),
@@ -95,14 +97,17 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 	ctx.IndentedJSON(http.StatusCreated, urls)
 }
 
-func Redirect(ctx *gin.Context, db *gorm.DB) {
-	s := ctx.Param("s")
+func RedirectShortenedUrlToOriginalUrl(ctx *gin.Context, db *gorm.DB) {
+	u := ctx.Param("u")
 
-	var urls []URLResponse
-	db.Find(&urls)
+	var data []ShortenerResponse
+	db.Find(&data)
 
-	for _, a := range urls {
-		if a.Short == "http://localhost:8080/s/"+s {
+	for _, a := range data {
+		fmt.Println(u, a.Short, a.Original)
+
+		if a.Short == "http://localhost:8080/s/"+u {
+			fmt.Println(u, a.Short, a.Original)
 			ctx.Redirect(http.StatusMovedPermanently, a.Original)
 
 			return

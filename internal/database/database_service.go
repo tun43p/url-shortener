@@ -6,7 +6,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/tun43p/tun43p.com/internal/api/urls"
+	"github.com/tun43p/tun43p.com/internal/api/http/shortener"
 )
 
 func CreateDatabase() *gorm.DB {
@@ -18,7 +18,7 @@ func CreateDatabase() *gorm.DB {
 		panic("Failed to connect to database")
 	}
 
-	if err := db.AutoMigrate(&urls.URLResponse{}); err != nil {
+	if err := db.AutoMigrate(&shortener.ShortenerResponse{}); err != nil {
 		panic("Failed to migrate database")
 	}
 

@@ -5,8 +5,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tun43p/tun43p.com/internal/router"
 	"gorm.io/gorm"
+
+	"github.com/tun43p/tun43p.com/internal/router"
 )
 
 func StartServer(db *gorm.DB) {
@@ -16,7 +17,6 @@ func StartServer(db *gorm.DB) {
 	e.SetTrustedProxies(nil)
 
 	router.V1Router(e, db)
-	router.RedirectionRouter(e, db)
 
 	fmt.Println("Starting API server on", host)
 
