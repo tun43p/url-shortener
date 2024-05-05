@@ -1,4 +1,4 @@
-package routes
+package urls
 
 import (
 	"net/http"
@@ -6,19 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sqids/sqids-go"
-	"github.com/tun43p/api/common"
+	"github.com/tun43p/tun43p.com/internal/api/failure"
 	"gorm.io/gorm"
 )
-
-type URLRequest struct {
-	Original string `json:"original"`
-}
-
-type URLResponse struct {
-	Original  string `json:"original" gorm:"unique"`
-	Short     string `json:"short"`
-	CreatedAt int64  `json:"created_at"`
-}
 
 func GetURLs(ctx *gin.Context, db *gorm.DB) {
 	u := ctx.Query("u")
@@ -51,7 +41,7 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 
 	if err := ctx.ShouldBindJSON(&url); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest,
-			&common.Error{
+			&failure.FailureResponse{
 				Status:  http.StatusBadRequest,
 				Message: "Error binding JSON request body",
 				Error:   err.Error(),
@@ -64,7 +54,7 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 
 	for _, a := range urls {
 		if a.Original == url.Original {
-			ctx.IndentedJSON(http.StatusConflict, &common.Error{
+			ctx.IndentedJSON(http.StatusConflict, &failure.FailureResponse{
 				Status:  http.StatusConflict,
 				Message: "URL already exists",
 				Error:   "URL already exists",
@@ -77,7 +67,7 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 	s, err := sqids.New()
 
 	if err != nil {
-		ctx.IndentedJSON(http.StatusInternalServerError, &common.Error{
+		ctx.IndentedJSON(http.StatusInternalServerError, &failure.FailureResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error generating short URL",
 			Error:   err.Error(),
@@ -87,7 +77,7 @@ func ShrinkUrl(ctx *gin.Context, db *gorm.DB) {
 	hash, err := s.Encode([]uint64{uint64(time.Now().Unix())})
 
 	if err != nil {
-		ctx.IndentedJSON(http.StatusInternalServerError, &common.Error{
+		ctx.IndentedJSON(http.StatusInternalServerError, &failure.FailureResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "Error generating short URL",
 			Error:   err.Error(),
@@ -119,7 +109,7 @@ func Redirect(ctx *gin.Context, db *gorm.DB) {
 		}
 	}
 
-	ctx.IndentedJSON(http.StatusNotFound, &common.Error{
+	ctx.IndentedJSON(http.StatusNotFound, &failure.FailureResponse{
 		Status:  http.StatusNotFound,
 		Message: "Short URL not found",
 		Error:   "Short URL not found",
