@@ -1,4 +1,4 @@
-module github.com/tun43p/api
+module github.com/tun43p/tun43p.com
 
 go 1.22.2
 
