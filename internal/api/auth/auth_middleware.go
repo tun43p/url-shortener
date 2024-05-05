@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/tun43p/tun43p.com/internal/api/failure"
 )
 
