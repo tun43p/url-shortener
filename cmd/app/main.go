@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/tun43p/tun43p.com/internal/database"
-	"github.com/tun43p/tun43p.com/internal/server"
+	"github.com/tun43p/url-shortener/internal/database"
+	"github.com/tun43p/url-shortener/internal/server"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/tun43p/tun43p.com
+module github.com/tun43p/url-shortener
 
 go 1.22.2
 

@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/tun43p/tun43p.com/internal/api/auth"
-	"github.com/tun43p/tun43p.com/internal/api/http/healthcheck"
-	"github.com/tun43p/tun43p.com/internal/api/http/shortener"
+	"github.com/tun43p/url-shortener/internal/api/auth"
+	"github.com/tun43p/url-shortener/internal/api/http/healthcheck"
+	"github.com/tun43p/url-shortener/internal/api/http/shortener"
 )
 
 func V1Router(e *gin.Engine, db *gorm.DB) {

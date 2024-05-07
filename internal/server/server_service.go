@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/tun43p/tun43p.com/internal/router"
+	"github.com/tun43p/url-shortener/internal/router"
 )
 
 func StartServer(db *gorm.DB) {

@@ -6,7 +6,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/tun43p/tun43p.com/internal/api/http/shortener"
+	"github.com/tun43p/url-shortener/internal/api/http/shortener"
 )
 
 func CreateDatabase() *gorm.DB {

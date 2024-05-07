@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/tun43p/tun43p.com/internal/api/failure"
+	"github.com/tun43p/url-shortener/internal/api/failure"
 )
 
 func AuthMiddleware(ctx *gin.Context) {

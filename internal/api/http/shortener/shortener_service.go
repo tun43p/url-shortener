@@ -9,7 +9,7 @@ import (
 	"github.com/sqids/sqids-go"
 	"gorm.io/gorm"
 
-	"github.com/tun43p/tun43p.com/internal/api/failure"
+	"github.com/tun43p/url-shortener/internal/api/failure"
 )
 
 func GetSingleOrAllShortenedUrls(ctx *gin.Context, db *gorm.DB) {
