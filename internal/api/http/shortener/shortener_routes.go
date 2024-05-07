@@ -6,11 +6,11 @@ import (
 )
 
 func ShortenerRoutes(e *gin.Engine, rg *gin.RouterGroup, db *gorm.DB) {
-	rg.GET("/s", func(ctx *gin.Context) {
+	rg.GET("/shortener", func(ctx *gin.Context) {
 		GetSingleOrAllShortenedUrls(ctx, db)
 	})
 
-	rg.POST("/s", func(ctx *gin.Context) {
+	rg.POST("/shortener", func(ctx *gin.Context) {
 		ShortenUrl(ctx, db)
 	})
 
