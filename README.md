@@ -1,8 +1,8 @@
-# API
+# URL Shortener
 
 ## Table of contents
 
-- [API](#api)
+- [URL Shortener](#url-shortener)
   - [Table of contents](#table-of-contents)
   - [Getting started](#getting-started)
     - [Download](#download)
@@ -13,7 +13,7 @@
 
 ### Download
 
-To download this project, please do: `git clone https://github.com/tun43p/api.git`.
+To download this project, please do: `git clone https://github.com/tun43p/url-shortener.git`.
 
 ## Authors
 
